@@ -1,6 +1,7 @@
 // pages/cms_main.tsx
 import CmsNav from "@/cms_components/dashboard/cms_nav";
 import CmsSidenav from "@/cms_components/dashboard/cms_sidenav";
+import Link from "next/link";
 
 export default function CmsMain() {
   return (
@@ -12,12 +13,15 @@ export default function CmsMain() {
           <h2 className="text-xl font-bold text-gray-700 mb-6">Today Scheduled Appointment</h2>
 
           {/* Just one box for now - Properties */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div className="bg-blue-400 h-40 flex justify-center items-center text-white p-6 rounded-lg shadow-md hover:scale-105 transition-transform cursor-pointer">
-              <div className="text-3xl mb-2">🏠</div>
-              <div className="text-lg font-bold">PROPERTIES</div>
-            </div>
-          </div>
+
+              <Link href="/cms_dashboard/properties">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div className="h-[200px] flex justify-center items-center text-white bg-gradient-to-br from-purple-600 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">
+                      <div className="text-3xl mb-2">🏠</div>
+                      <div className="text-lg font-bold">PROPERTIES</div>
+                    </div>
+              </div>
+              </Link>
         </main>
       </div>
     </div>

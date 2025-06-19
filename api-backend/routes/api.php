@@ -1,9 +1,9 @@
 <?php
 
+use App\Http\Controllers\PropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\ProductController;
 
 Route::post("register", [AuthController::class, "register"]);
 Route::post("login", [AuthController::class, "login"]);
@@ -14,8 +14,8 @@ Route::group([
     Route::get("profile",[AuthController::class, "profile"]);
     Route::get("logout",[AuthController::class, "logout"]);
 
-    Route::apiResource("products", ProductController::class);
 });
+Route::apiResource("properties", PropertyController::class); // ✅ Add this line    
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

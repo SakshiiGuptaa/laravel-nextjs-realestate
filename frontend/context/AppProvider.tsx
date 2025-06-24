@@ -33,9 +33,10 @@ export const AppProvider = ({
 
     if (token) {
         setAuthToken(token);
-    } else {
-        router.push("/auth");
-    }
+    } 
+    // else {
+    //     router.push("/auth");
+    // }
 
     setIsLoading(false);
     }, []); // <--- Add this empty array

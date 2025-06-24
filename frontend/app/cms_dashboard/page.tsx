@@ -10,7 +10,6 @@ export default function CmsMain() {
       <div className="flex flex-col flex-grow">
         <CmsNav />
         <main className="p-6 flex-1 overflow-auto">
-          <h2 className="text-xl font-bold text-gray-700 mb-6">Today Scheduled Appointment</h2>
 
           {/* Just one box for now - Properties */}
 

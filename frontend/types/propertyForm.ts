@@ -9,4 +9,7 @@ export type PropertyFormData = {
   areaType: string;
   areaValue: string;
   areaUnit: string;
+  photos?: File[];     // ✅ newly added
+  videos?: File[];     // ✅ newly added
+  amenities?: string[]; // ✅ newly added
 };

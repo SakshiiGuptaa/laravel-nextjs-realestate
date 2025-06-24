@@ -26,4 +26,19 @@ class Property extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    public function photos()
+    {
+        return $this->hasMany(PropertyPhoto::class);
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(PropertyVideo::class);
+    }
+
+    public function amenities()
+    {
+        return $this->hasMany(PropertyAmenity::class);
+    }
 }

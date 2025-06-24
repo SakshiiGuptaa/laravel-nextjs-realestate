@@ -4,7 +4,9 @@ import CmsSidenav from "@/cms_components/dashboard/cms_sidenav";
 export default function NewPropertyForm() {
   return (
     <div className="flex h-screen bg-gray-100">
-      <CmsSidenav />
+      <div className="hidden md:block">
+        <CmsSidenav />
+      </div>
       <div className="flex flex-col flex-grow">
         <CmsNav />
         <main className="p-6 flex-1 overflow-auto">

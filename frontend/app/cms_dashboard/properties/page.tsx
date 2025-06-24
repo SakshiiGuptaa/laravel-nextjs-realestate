@@ -5,7 +5,10 @@ import CmsSidenav from "@/cms_components/dashboard/cms_sidenav";
 export default function PropertiesPage() {
   return (
     <div className="flex h-screen bg-gray-100">
-      <CmsSidenav />
+      <div className="hidden md:block">
+        <CmsSidenav />
+      </div>
+
       <div className="flex flex-col flex-grow">
         <CmsNav />
         <main className="p-6 flex-1 overflow-auto">
@@ -27,7 +30,7 @@ export default function PropertiesPage() {
 
           {/* Search Bar */}
           <div className="bg-white p-5 rounded-lg shadow mb-6 flex flex-col md:flex-row items-center gap-4">
-            <select className="border border-gray-300 rounded-md px-4 py-2 w-full md:w-auto focus:outline-blue-400">
+            <select className="border border-gray-300 rounded-md px-4 py-2 w-full sm:w-auto focus:outline-blue-400">
               <option>Choose Field</option>
               <option value="title">Title</option>
               <option value="type_property">Type</option>
@@ -42,85 +45,7 @@ export default function PropertiesPage() {
           </div>
 
           {/* Table */}
-          <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
-            <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-              <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-                <tr>
-                  <th scope="col" className="p-4">
-                    <div className="flex items-center">
-                      <input
-                        id="checkbox-all-search"
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label htmlFor="checkbox-all-search" className="sr-only">
-                        checkbox
-                      </label>
-                    </div>
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Title
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Type
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Purpose
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Price
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Area (sqft)
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Furnished
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Status
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Featured
-                  </th>
-                  <th scope="col" className="px-6 py-3">
-                    Action
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                <tr className="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                  <td className="w-4 p-4">
-                    <div className="flex items-center">
-                      <input
-                        id="checkbox-table-search-1"
-                        type="checkbox"
-                        className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded-sm focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                      />
-                      <label
-                        htmlFor="checkbox-table-search-1"
-                        className="sr-only"
-                      >
-                        checkbox
-                      </label>
-                    </div>
-                  </td>
-                  <th
-                    scope="row"
-                    className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                  ></th>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                  <td className="px-6 py-4"></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+       
           <nav
             className="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4"
             aria-label="Table navigation"

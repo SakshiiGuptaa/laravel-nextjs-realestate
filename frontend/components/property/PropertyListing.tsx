@@ -37,24 +37,46 @@ export default function PropertyListingWizard() {
 
   const handleSubmit = async () => {
     try {
-      const payload = toSnakeCasePayload(formData);
+      const payload = toSnakeCasePayload(formData) as Record<string, any>;
+      const form = new FormData();
+
+      // Append text fields
+      for (const key in payload) {
+        if (Array.isArray(payload[key])) {
+          payload[key].forEach((value: string) =>
+            form.append(`${key}[]`, value)
+          );
+        } else {
+          form.append(key, payload[key]);
+        }
+      }
+
+      // Append photos
+      formData.photos?.forEach((photo) => {
+        form.append("photos[]", photo);
+      });
+
+      // Append videos
+      formData.videos?.forEach((video) => {
+        form.append("videos[]", video);
+      });
 
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_API_URL}/properties`,
-        payload,
+        form,
         {
           headers: {
+            "Content-Type": "multipart/form-data",
             // Authorization: `Bearer ${localStorage.getItem("token")}`,
-            "Content-Type": "application/json",
           },
         }
       );
+
       toast.success("Property submitted successfully!");
       console.log(response.data);
 
-      // Reset form
-      setFormData(initialData);
-      // router.push("/dashboard"); // or any success page
+      setFormData(initialData); // reset
+      // router.push("/dashboard");
     } catch (error) {
       console.error("Submission error:", error);
       toast.error("Something went wrong!");

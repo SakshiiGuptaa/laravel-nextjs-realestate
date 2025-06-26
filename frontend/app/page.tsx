@@ -7,42 +7,51 @@ import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import Destinations from "@/components/Destinations";
 import Footer from "@/components/Footer";
+import HeaderBar from "@/components/layout/HeaderBar";
+import PropertyTypes from "@/components/PropertyTypes";
 
 const destinations = [
   {
-    name: "Bengaluru",
-    projects: "1500+ Projects",
-    imageUrl: "/bengaluru.jpg",
+    name: "Paramount Symphony",
+    projects: "",
+    imageUrl: "/destinations/Paramount.jpeg",
   },
   {
-    name: "Chennai",
-    projects: "2000+ Projects",
-    imageUrl: "/chennai.jpg",
+    name: "Mahagun Mascot",
+    projects: "",
+    imageUrl: "/destinations/Mahagun.jpeg",
   },
   {
-    name: "Hyderabad",
-    projects: "1500+ Projects",
-    imageUrl: "/hyderabad.jpg",
+    name: "GH7",
+    projects: "",
+    imageUrl: "/destinations/Gh7.jpeg",
   },
   {
-    name: "Coimbatore",
-    projects: "300+ Projects",
-    imageUrl: "/coimbatore.jpg",
+    name: "Gold Coast",
+    projects: "",
+    imageUrl: "/destinations/Goldcoast.jpeg",
   },
   {
-    name: "Madurai",
-    projects: "50+ Projects",
-    imageUrl: "/madurai.jpg",
+    name: "Panchsheel Wellington",
+    projects: "",
+    imageUrl: "/destinations/Panchsheel.jpeg",
   },
 ];
 
 export default function Home() {
   return (
     <>
-      <Navbar/>
-      <HeroSection/>
+      {/* Show HeaderBar on small screens, Navbar on medium and up */}
+      <div className="block md:hidden">
+        <HeaderBar />
+      </div>
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <HeroSection />
       <Destinations destinations={destinations} />
-      <Footer/>
-   </>
+      <PropertyTypes />
+      <Footer />
+    </>
   );
 }

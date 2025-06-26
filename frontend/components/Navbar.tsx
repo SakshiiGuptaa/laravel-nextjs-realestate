@@ -1,117 +1,70 @@
-"use client";
-
+"use client"
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { useEffect } from "react";
 
 const Navbar = () => {
-  useEffect(() => {
-    // Dynamically import Flowbite JS
-    import("flowbite-react");
-  }, []);
-
   return (
-    <nav className="bg-white border-b border-gray-200 shadow-sm dark:bg-gray-900 dark:border-gray-700">
-      <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
-        <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <Image src="/logo/logo_crossingrepublic.png" width={240} height={240} alt="Logo" />
-       
-        </Link>
-
-        {/* Mobile Toggle */}
-        <button
-          data-collapse-toggle="navbar-default"
-          type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="navbar-default"
-          aria-expanded="false"
-        >
-          <span className="sr-only">Open main menu</span>
-          <svg
-            className="w-5 h-5"
-            aria-hidden="true"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 17 14"
-          >
-            <path
-              stroke="currentColor"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M1 1h15M1 7h15M1 13h15"
-            />
-          </svg>
-        </button>
-
-        {/* Navigation Links */}
-        <div className="hidden w-full md:block md:w-auto" id="navbar-default">
-          <ul className="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-6 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500"
-                aria-current="page"
-              >
-                Flats
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Villas
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Plots
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Projects
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Blog
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/auth"
-                className="block py-2 px-3 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white"
-              >
-                Login
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/PropertyPost"
-                className="relative bg-blue-800 text-white px-4 py-1.5 rounded-full font-semibold hover:bg-blue-700"
-              >
-                Post Property
-                <span className="absolute -top-2 -right-2 text-xs font-bold text-yellow-400 bg-white rounded-full px-1">
-                  Free
-                </span>
-              </Link>
-            </li>
-          </ul>
-        </div>
+    <header className="flex justify-between items-center px-8 py-3 shadow-lg border-b border-gray-200 bg-white">
+      <Link href="/">
+      <div className="flex items-center gap-4">
+        <Image src="/logo_lg.png" alt="Logo" width={300} height={170} />
       </div>
-    </nav>
+      </Link>
+      <nav className="flex items-center gap-10 text-md font-medium text-gray-700">
+        <Link href="/PropertiesListing">Flats</Link>
+        <Link href="/PropertiesListing">Villas</Link>
+        <Link href="/PropertiesListing">Plots</Link>
+        <Link href="/PropertiesListing">Projects</Link>
+        <Link href="/auth">Login</Link>
+        <Link
+          href="/PropertyPost"
+          className="bg-blue-800 text-white px-6 py-2 rounded-full font-bold relative text-base shine-animation overflow-hidden"
+        >
+          <span className="relative z-10">Post Property</span>
+          <span className="shine absolute inset-0"></span>
+          <span className="absolute -top-2 -right-3 text-xs font-bold text-cyan-800 bg-white rounded-full px-1 shine-animation overflow-hidden">
+            <span className="relative z-10">Free</span>
+            <span className="shine absolute inset-0"></span>
+          </span>
+        </Link>
+      </nav>
+      {/* Shine animation style */}
+      <style jsx>{`
+        .shine-animation {
+          position: relative;
+          display: inline-block;
+        }
+        .shine {
+          position: absolute;
+          top: 0;
+          left: -75%;
+          width: 75%;
+          height: 100%;
+          background: linear-gradient(
+            120deg,
+            transparent 0%,
+            #e0f7fa 50%,
+            transparent 100%
+          );
+          opacity: 0.7;
+          animation: shine-move 1.5s infinite;
+          z-index: 1;
+          pointer-events: none;
+        }
+        @keyframes shine-move {
+          0% {
+            left: -75%;
+          }
+          60% {
+            left: 100%;
+          }
+          100% {
+            left: 100%;
+          }
+        }
+      `}</style>
+    </header>
   );
 };
 

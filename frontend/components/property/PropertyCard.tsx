@@ -4,11 +4,13 @@ import FavoriteButton from "./FavoriteButton";
 import ViewNumberModal from "./ViewNumberModal";
 import BhkBadge from "./BhkBadge";
 import type { Property } from "@/types/property";
+import Link from "next/link";
 
 export default function PropertyCard({ property }: { property: Property }) {
   const [showModal, setShowModal] = useState(false);
 
   return (
+    
     <div className="bg-white/80 backdrop-blur-md border border-gray-100 rounded-2xl shadow-lg hover:shadow-2xl transition-shadow duration-300 flex flex-col sm:flex-row mb-6 overflow-hidden">
       <div className="relative sm:w-72 w-full flex-shrink-0">
         <PropertyImageCarousel
@@ -19,6 +21,7 @@ export default function PropertyCard({ property }: { property: Property }) {
           <FavoriteButton propertyId={parseInt(property.id, 10)} />
         </div>
       </div>
+      <Link href={`/PropertyDetails/${property.id}`}>
       <div className="flex-1 flex flex-col justify-between p-4 sm:p-6">
         <div>
           <div className="flex flex-wrap gap-2 mb-2">
@@ -82,6 +85,7 @@ export default function PropertyCard({ property }: { property: Property }) {
           phoneNumber={property.phoneNumber}
         />
       </div>
+      </Link>
     </div>
   );
 }

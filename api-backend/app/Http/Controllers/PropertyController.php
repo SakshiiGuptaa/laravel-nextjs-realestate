@@ -15,16 +15,43 @@ class PropertyController extends Controller
      */
     public function index()
     {
-        // $user_id = auth()->user()->id;
+        $properties = Property::with(['photos', 'videos', 'amenities'])->get();
 
-        // $properties = Property::where("user_id", $user_id)->get();
-        $properties = Property::all(); // show all properties for now
+        $mapped = $properties->map(function ($property) {
+            return [
+                'id' => $property->id,
+                'title' => $property->sub_type,
+                'price' => '₹' . number_format($property->area_value),
+                'area' => $property->area_value,
+                'price2' => 'Price on Request',
+                'location' => $property->city,
+                'bhk' => $property->bedrooms,
+                'bathrooms' => $property->bathrooms,
+                'balconies' => $property->balconies,
+                'area_type' => $property->area_type,
+                'description' => "{$property->property_type} - {$property->listing_type}",
+                'builder' => 'Default Builder',
+                'phoneNumber' => '9876543210',
+                'isRera' => true,
+                'isZeroBrokerage' => true,
+                'is3D' => false,
+                'isNewBooking' => false,
+                'images' => $property->photos->map(function ($photo) {
+                    return asset("storage/" . $photo->file_path);
+                }),
+
+                'videos' => $property->videos->pluck('file_path'),
+                'amenities' => $property->amenities->pluck('amenity'),
+            ];
+        });
+
 
         return response()->json([
-            "status" => true,
-            "properties" => $properties
+            'status' => true,
+            'properties' => $mapped,
         ]);
     }
+
 
     /**
      * Store a newly created property in storage (no auth).
@@ -89,11 +116,133 @@ class PropertyController extends Controller
      */
     public function show(Property $property)
     {
+        $property->load(['photos', 'videos', 'amenities']);
+
+        $mapped = [
+            'id' => (string) $property->id,
+            'title' => $property->sub_type ?? '',
+            'price' => '₹' . number_format($property->area_value ?? 0),
+            'pricePerSqft' => '₹9,548 per sq.ft.', // Placeholder — adjust if needed
+            'bhk' => (int) $property->bedrooms,
+            'baths' => (int) $property->bathrooms,
+            'area' => (int) $property->area_value,
+            'areaUnit' => $property->area_unit ?? 'sq.ft.',
+
+            'reraStatus' => [
+                'isRegistered' => true, // Adjust if dynamic
+                'registrationNo' => 'UPRERAPRJ958386',
+                'website' => 'http://up-rera.in/projects',
+            ],
+
+            'isReadyToMove' => true, // Or pull from DB
+
+            'images' => $property->photos->map(function ($photo) {
+                return asset("storage/" . $photo->file_path);
+            }),
+
+            'configuration' => [
+                'bedrooms' => (int) $property->bedrooms,
+                'bathrooms' => (int) $property->bathrooms,
+                'balconies' => (int) $property->balconies,
+                'floor' => 15,
+                'totalFloors' => 23,
+                'propertyAge' => '0 to 1 Year Old',
+            ],
+
+            'address' => [
+                'society' => 'Coco County',
+                'locality' => 'Sector 10 Greater Noida West',
+                'city' => $property->city ?? '',
+                'state' => 'UP',
+            ],
+
+            'society' => [
+                'name' => 'Coco County',
+                'area' => 4.54,
+                'areaUnit' => 'acres',
+                'towers' => 3,
+                'units' => 838,
+                'floors' => 23,
+                'configuration' => '3 BHK',
+                'propertyType' => $property->property_type ?? '',
+                'brochureUrl' => '#',
+                'developer' => 'ABA Corp',
+                'possession' => '2023',
+            ],
+
+            'amenities' => $property->amenities->pluck('amenity'),
+
+            'nearbyPlaces' => [
+                ['name' => 'Gaur City Mall', 'type' => 'Mall'],
+                ['name' => 'GT Road', 'type' => 'Road'],
+                ['name' => 'The Infinity School', 'type' => 'School'],
+                ['name' => 'JIMS Noida Extension College', 'type' => 'College'],
+                ['name' => 'Numed Super Speciality Hospital', 'type' => 'Hospital'],
+            ],
+
+            'whyConsider' => [
+                'Close to School',
+                'Fresh Construction',
+                'Close to Hospital',
+                'Close to Market',
+                'Wheel Chair Friendly',
+                'Pet Friendly',
+                'On-Call Maintenance Staff',
+                'Gated Society',
+                'Corner Property',
+                'Airy Rooms',
+                'Parking Available',
+                'Fitness Centre/ Gym',
+                'Club/ Community Center',
+                'Swimming Pool Available',
+            ],
+
+            'transactionDetails' => [
+                'transactionType' => 'Resale',
+                'propertyOwnership' => 'Co-operative Society',
+                'furnishing' => 'Unfurnished',
+                'parking' => '1 Covered',
+                'gatedCommunity' => true,
+                'petFriendly' => true,
+                'wheelchairFriendly' => true,
+                'powerBackup' => 'None',
+                'cornerProperty' => true,
+            ],
+
+            'about' => [
+                'address' => 'A 1510, Sector 10 Greater Noida West, Greater Noida',
+                'description' => 'County group is well known for its quality. Flat is brand new. Is hardly a year old. All the top notch amenities are available.',
+            ],
+
+            'features' => [
+                'Power Back-up',
+                'Intercom Facility',
+                'Lift(s)',
+                'Water purifier',
+                'Maintenance Staff',
+                'Swimming Pool',
+                'Park',
+                'Security Personnel',
+                'Airy Rooms',
+                'Shopping Centre',
+            ],
+
+            'owner' => [
+                'name' => 'Sandhya',
+                'avatar' => '',
+                'phoneNumber' => '9876543210',
+                'propertiesListed' => 1,
+                'localities' => ['Sector 10 Greater Noida West'],
+            ],
+        ];
+
         return response()->json([
             "status" => true,
-            "property" => $property
+            "property" => $mapped
         ]);
     }
+
+
 
     /**
      * Update the specified property in storage.

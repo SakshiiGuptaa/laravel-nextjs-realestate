@@ -15,7 +15,9 @@ type Props = {
 export default function Destinations({ destinations }: Props) {
   return (
     <section className="py-16 bg-white text-center">
-      <h2 className="text-3xl md:text-4xl font-bold mb-2">Destinations</h2>
+      <h2 className="text-cyan-800 text-3xl md:text-4xl font-bold mb-2">
+        Societies
+      </h2>
       <p className="text-gray-600 mb-8">
         You are in the right destination where you need to be.
       </p>

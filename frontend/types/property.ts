@@ -28,6 +28,8 @@ export type Property = {
   price: string;
   price2?: string;
   description?: string;
+  property_type?: string;
+  listing_type?: string;
   builder?: string;
   phoneNumber: string;
 };

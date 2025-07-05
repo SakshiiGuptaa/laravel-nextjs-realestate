@@ -176,6 +176,199 @@ export default function Step3PropertyProfile({
           </button>
         </div>
       </div>
+
+      {/* Floor Details */}
+      <div>
+        <label className="block font-bold mb-2 sm:mb-3 text-base sm:text-lg text-black">
+          Floor Details
+        </label>
+        <span className="block text-gray-500 text-sm mb-3">
+          Total no of floors and your floor details
+        </span>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-4">
+          <input
+            type="number"
+            min={1}
+            placeholder="Total Floors"
+            value={data.totalFloors || ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, totalFloors: e.target.value }))
+            }
+            className="border border-gray-300 rounded-xl px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-1/2 text-base sm:text-lg text-gray-800"
+          />
+          <select
+            value={data.propertyOnFloor || ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, propertyOnFloor: e.target.value }))
+            }
+            className="border border-gray-300 rounded-xl px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-1/2 text-base sm:text-lg text-gray-800"
+          >
+            <option value="">Property on Floor</option>
+            {[...Array(Number(data.totalFloors || 20)).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {/* Availability Status */}
+      <div>
+        <label className="block font-bold mb-2 sm:mb-3 text-base sm:text-lg text-black">
+          Availability Status
+        </label>
+        <div className="flex gap-3 mb-4 flex-wrap">
+          {["Ready to move", "Under construction"].map((status) => (
+            <button
+              key={status}
+              type="button"
+              className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full border text-base sm:text-lg font-medium transition ${
+                data.availabilityStatus === status
+                  ? "border-blue-700 bg-blue-50 text-blue-700"
+                  : "border-gray-300 text-gray-800 bg-white hover:border-blue-300"
+              }`}
+              onClick={() =>
+                setData((d) => ({ ...d, availabilityStatus: status }))
+              }
+            >
+              {status}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Ownership */}
+      <div>
+        <label className="font-bold mb-2 sm:mb-3 text-base sm:text-lg text-black flex items-center gap-2">
+          Ownership
+          <span
+            title="Type of property ownership"
+            className="text-blue-600 cursor-pointer text-lg"
+          >
+            ?
+          </span>
+        </label>
+        <div className="flex gap-3 mb-4 flex-wrap">
+          {[
+            "Freehold",
+            "Leasehold",
+            "Co-operative society",
+            "Power of Attorney",
+          ].map((type) => (
+            <button
+              key={type}
+              type="button"
+              className={`px-4 py-2 sm:px-6 sm:py-3 rounded-full border text-base sm:text-lg font-medium transition ${
+                data.ownership === type
+                  ? "border-blue-700 bg-blue-50 text-blue-700"
+                  : "border-gray-300 text-gray-800 bg-white hover:border-blue-300"
+              }`}
+              onClick={() => setData((d) => ({ ...d, ownership: type }))}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Price Details */}
+      <div>
+        <label className="block font-bold mb-2 sm:mb-3 text-base sm:text-lg text-black">
+          Price Details
+        </label>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-3">
+          <input
+            type="number"
+            placeholder="₹ Expected Price"
+            value={data.expectedPrice || ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, expectedPrice: e.target.value }))
+            }
+            className="border border-gray-300 rounded-xl px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-1/2 text-base sm:text-lg text-gray-800"
+          />
+          <input
+            type="number"
+            placeholder="₹ Price per sq.ft."
+            value={data.pricePerSqft || ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, pricePerSqft: e.target.value }))
+            }
+            className="border border-gray-300 rounded-xl px-4 py-2 sm:px-6 sm:py-3 w-full sm:w-1/2 text-base sm:text-lg text-gray-800"
+          />
+        </div>
+        <div className="mb-2 text-gray-600 text-sm font-medium">
+          ₹ Price in words{" "}
+          {data.expectedPrice
+            ? `: ${Number(data.expectedPrice).toLocaleString("en-IN")} only`
+            : ""}
+        </div>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6">
+          <label className="flex items-center gap-2 text-gray-700 text-base">
+            <input
+              type="checkbox"
+              checked={!!data.allInclusive}
+              onChange={(e) =>
+                setData((d) => ({ ...d, allInclusive: e.target.checked }))
+              }
+              className="accent-blue-700"
+            />
+            All inclusive price
+            <span
+              title="Includes all charges"
+              className="text-blue-600 cursor-pointer text-lg"
+            >
+              ?
+            </span>
+          </label>
+          <label className="flex items-center gap-2 text-gray-700 text-base">
+            <input
+              type="checkbox"
+              checked={!!data.taxExcluded}
+              onChange={(e) =>
+                setData((d) => ({ ...d, taxExcluded: e.target.checked }))
+              }
+              className="accent-blue-700"
+            />
+            Tax and Govt. charges excluded
+          </label>
+          <label className="flex items-center gap-2 text-gray-700 text-base">
+            <input
+              type="checkbox"
+              checked={!!data.priceNegotiable}
+              onChange={(e) =>
+                setData((d) => ({ ...d, priceNegotiable: e.target.checked }))
+              }
+              className="accent-blue-700"
+            />
+            Price Negotiable
+          </label>
+        </div>
+        {/* <button
+          type="button"
+          className="text-blue-700 underline text-base sm:text-lg mt-1"
+          // Add your handler for more pricing details here
+        ></button> */}
+      </div>
+
+      <div>
+        <label className="block font-bold mb-2 sm:mb-3 text-base sm:text-lg text-black">
+          What makes your property unique
+        </label>
+        <span className="block text-gray-500 text-sm mb-3">
+          Adding description will increase your listing visibility
+        </span>
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-6 mb-4">
+          <textarea
+            placeholder="Share some details about your property like spacious rooms, well maintained facilities.."
+            value={data.description || ""}
+            onChange={(e) =>
+              setData((d) => ({ ...d, description: e.target.value }))
+            }
+            className="w-full h-40 px-4 py-3 sm:px-6 sm:py-4 border border-gray-300 rounded-xl text-base text-gray-800 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-300"
+          />
+        </div>
+      </div>
       <button
         type="submit"
         className="mt-6 sm:mt-10 px-6 py-3 sm:px-10 sm:py-4 bg-blue-700 text-white rounded-xl font-bold text-lg sm:text-xl shadow hover:bg-blue-800 transition w-full"

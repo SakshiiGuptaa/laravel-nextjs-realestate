@@ -85,7 +85,7 @@ const Footer = () => {
                 <FaInstagram size={22} />
               </a>
             </div>
-            <div className="mb-3 font-semibold text-base">Download the App</div>
+            {/* <div className="mb-3 font-semibold text-base">Download the App</div>
             <div className="flex justify-center md:justify-start space-x-2 mb-4">
               <a href="#" aria-label="Google Play">
                 <Image
@@ -103,7 +103,7 @@ const Footer = () => {
                   height={36}
                 />
               </a>
-            </div>
+            </div> */}
           </div>
         </div>
         {/* Disclaimer and copyright */}

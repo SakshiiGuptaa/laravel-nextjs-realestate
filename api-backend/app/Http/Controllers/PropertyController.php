@@ -13,6 +13,7 @@ class PropertyController extends Controller
     /**
      * Display a listing of the properties (no auth).
      */
+
     public function index()
     {
         $properties = Property::with(['photos', 'videos', 'amenities'])->get();
@@ -21,6 +22,8 @@ class PropertyController extends Controller
             return [
                 'id' => $property->id,
                 'title' => $property->sub_type,
+                'property_type' => $property->property_type,
+                'listing_type' => $property->listing_type,
                 'price' => '₹' . number_format($property->area_value),
                 'area' => $property->area_value,
                 'price2' => 'Price on Request',
@@ -52,6 +55,63 @@ class PropertyController extends Controller
         ]);
     }
 
+    /**
+     * Display a listing of the properties with filter(no auth). Post
+     */
+    public function filter(Request $request){
+        $query = Property::query();
+
+        if($request->filled('city')){
+            $query->where('city',$request->city);
+        }
+        if($request->filled('property_type')){
+            $query->where('property_type',$request->property_type);
+        }
+        if($request->filled('bhk')){
+            $query->where('bedrooms',$request->bhk);
+        }
+        if($request->filled('sub_type')){
+            $query->where('sub_type',$request->sub_type);
+        }
+
+        $properties = $query->with(['photos', 'videos', 'amenities'])->get();
+
+        $mapped = $properties->map(function ($property) {
+            return [
+                'id' => $property->id,
+                'title' => $property->sub_type,
+                'property_type' => $property->property_type,
+                'sub_type' => $property->sub_type,
+                'price' => '₹' . number_format($property->area_value),
+                'area' => $property->area_value,
+                'price2' => 'Price on Request',
+                'location' => $property->city,
+                'bhk' => $property->bedrooms,
+                'bathrooms' => $property->bathrooms,
+                'balconies' => $property->balconies,
+                'area_type' => $property->area_type,
+                'description' => "{$property->property_type} - {$property->listing_type}",
+                'builder' => 'Default Builder',
+                'phoneNumber' => '9876543210',
+                'isRera' => true,
+                'isZeroBrokerage' => true,
+                'is3D' => false,
+                'isNewBooking' => false,
+                'images' => $property->photos->map(function ($photo) {
+                    return asset("storage/" . $photo->file_path);
+                }),
+
+                'videos' => $property->videos->pluck('file_path'),
+                'amenities' => $property->amenities->pluck('amenity'),
+            ];
+        });
+
+
+        return response()->json([
+            'status' => true,
+            'properties' => $mapped,
+        ]);
+    }
 
     /**
      * Store a newly created property in storage (no auth).
@@ -70,6 +130,17 @@ class PropertyController extends Controller
             'area_type' => $request->area_type,
             'area_value' => $request->area_value,
             'area_unit' => $request->area_unit,
+            
+            // 👉 New Step 3 fields
+            'total_floors' => $request->total_floors,
+            'property_on_floor' => $request->property_on_floor,
+            'availability_status' => $request->availability_status,
+            'ownership' => $request->ownership,
+            'expected_price' => $request->expected_price,
+            'price_per_sqft' => $request->price_per_sqft,
+            'all_inclusive' => $request->has('all_inclusive') ? true : false,
+            'tax_excluded' => $request->has('tax_excluded') ? true : false,
+            'price_negotiable' => $request->has('price_negotiable') ? true : false,
         ]);
 
         // Store Photos

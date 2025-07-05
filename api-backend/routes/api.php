@@ -16,6 +16,7 @@ Route::group([
 
 });
 Route::apiResource("properties", PropertyController::class); // ✅ Add this line    
+Route::post('/properties/filter',[PropertyController::class,'filter']);
 
 // Route::get('/user', function (Request $request) {
 //     return $request->user();

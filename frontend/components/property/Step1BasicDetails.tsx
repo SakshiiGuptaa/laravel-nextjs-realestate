@@ -6,7 +6,7 @@ type Step1BasicDetailsProps = {
   onNext: () => void;
 };
 
-const listingTypes = ["Sell", "Rent / Lease", "PG"];
+const listingTypes = ["Buy", "Sell", "Rent / Lease", "Projects", "PG"];
 const propertyTypes = ["Residential", "Commercial"];
 const subTypes = [
   "Flat/Apartment",

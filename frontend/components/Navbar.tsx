@@ -12,10 +12,21 @@ const Navbar = () => {
       </div>
       </Link>
       <nav className="flex items-center gap-10 text-md font-medium text-gray-700">
-        <Link href="/PropertiesListing">Flats</Link>
-        <Link href="/PropertiesListing">Villas</Link>
-        <Link href="/PropertiesListing">Plots</Link>
-        <Link href="/PropertiesListing">Projects</Link>
+        <Link href={{ pathname: "/PropertiesListing", query: { sub_type: "Flat/Apartment" } }}>
+          Flats
+        </Link>
+
+        <Link href={{ pathname: "/PropertiesListing", query: { sub_type: "Independent House / Villa" } }}>
+          Villas
+        </Link>
+
+        <Link href={{ pathname: "/PropertiesListing", query: { sub_type: "Plot / Land" } }}>
+          Plots
+        </Link>
+        <Link href={{ pathname: "/PropertiesListing", query: { sub_type: "Projects" } }}>
+          Projects
+        </Link>
+
         <Link href="/auth">Login</Link>
         <Link
           href="/PropertyPost"

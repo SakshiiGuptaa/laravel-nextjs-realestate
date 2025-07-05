@@ -12,4 +12,14 @@ export type PropertyFormData = {
   photos?: File[];     // ✅ newly added
   videos?: File[];     // ✅ newly added
   amenities?: string[]; // ✅ newly added
+  totalFloors?: string;
+  propertyOnFloor?: string;
+  availabilityStatus?: string;
+  ownership?: string;
+  expectedPrice?: string;
+  pricePerSqft?: string;
+  allInclusive?: boolean;
+  taxExcluded?: boolean;
+  priceNegotiable?: boolean;
+  description?:string;
 };

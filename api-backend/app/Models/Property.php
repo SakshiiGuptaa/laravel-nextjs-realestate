@@ -21,6 +21,15 @@ class Property extends Model
         'area_type',
         'area_value',
         'area_unit',
+        'total_floors',
+        'property_on_floor',
+        'availability_status',
+        'ownership',
+        'expected_price',
+        'price_per_sqft',
+        'all_inclusive',
+        'tax_excluded',
+        'price_negotiable',
     ];
     public function user()
     {

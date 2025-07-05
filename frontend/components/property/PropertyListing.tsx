@@ -23,6 +23,16 @@ const initialData: PropertyFormData = {
   areaType: "",
   areaValue: "",
   areaUnit: "sq.ft",
+  totalFloors: "",
+  propertyOnFloor: "",
+  availabilityStatus: "",
+  ownership: "",
+  expectedPrice: "",
+  pricePerSqft: "",
+  allInclusive: false,
+  taxExcluded: false,
+  priceNegotiable: false,
+  description:""
 };
 
 const totalSteps = 5;

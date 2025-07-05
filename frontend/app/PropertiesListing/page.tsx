@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from "axios";
-
+import { useSearchParams } from "next/navigation";
 import Navbar from "@/components/Navbar";
 import MobileNav from "@/components/layout/HeaderBar";
 import Footer from "@/components/Footer";
@@ -11,6 +11,7 @@ import SortDropdown from "@/components/ui/SortDropdown";
 import PropertyList from "@/components/property/PropertyList";
 import Pagination from "@/components/ui/Pagination";
 import type { Filters, Property } from "@/types/property";
+import useProperties from "@/hooks/useProperties";
 
 const initialFilters: Filters = {
   localities: [
@@ -27,28 +28,58 @@ const initialFilters: Filters = {
 };
 
 export default function PropertiesPage() {
-  const [filters, setFilters] = useState<Filters>(initialFilters);
-  const [sort, setSort] = useState("relevance");
-  const [page, setPage] = useState(1);
+  // Search bar params start
+  const searchParams = useSearchParams();
+  const city = searchParams.get("city");
+  const property_type = searchParams.get("property_type");
+  const bhk = searchParams.get("bhk");
+  // Search bar params end
+
+  //Navbar query param of flat,villa,plot,projects
+
+  const sub_type = searchParams.get("sub_type");
+
   const [properties, setProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchProperties = async () => {
-      try {
+  const [filters, setFilters] = useState<Filters>(initialFilters);
+  const [sort, setSort] = useState("relevance");
+  const [page, setPage] = useState(1);
+
+useEffect(() => {
+  const fetchProperties = async () => {
+    try {
+      if (city || property_type || bhk ||sub_type) {
+        // If ANY query param exists, run filter API
+        const payload = {
+          city: city || null,
+          property_type: property_type || null,
+          bhk: bhk || null,
+          sub_type: sub_type || null,
+        };
+
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_URL}/properties/filter`,
+          payload
+        );
+        setProperties(response.data.properties);
+      } else {
+        // Else fetch ALL properties
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_API_URL}/properties`
         );
-        setProperties(response.data.properties); // Laravel returns { status: true, properties: [...] }
-      } catch (error) {
-        console.error("Error fetching properties:", error);
-      } finally {
-        setLoading(false);
+        setProperties(response.data.properties);
       }
-    };
+    } catch (error) {
+      console.error("Error loading properties:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchProperties();
-  }, []);
+  fetchProperties();
+}, [city, property_type, bhk,sub_type]);
+
 
   const totalPages = 1; // You can update this later if pagination is added
 

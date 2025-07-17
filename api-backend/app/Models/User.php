@@ -20,7 +20,9 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'user_type',
         'email',
+        'phone_number',
         'password',
     ];
 
@@ -50,5 +52,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Property::class);
     }
-
+    public function dealerWebsites()
+    {
+        return $this->hasMany(DealerWebsite::class);
+    }
 }

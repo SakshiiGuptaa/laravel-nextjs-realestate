@@ -3,13 +3,14 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { myAppHook } from "@/context/AppProvider";
+import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 interface formData {
   name?: string;
+  user_type?: string;
   email: string;
-  password: string;
-  password_confirmation?: string;
-  usertype?: string;
+  phone_number: string;
 }
 
 const AuthCard = ({
@@ -21,13 +22,49 @@ const AuthCard = ({
 }) => {
   const [formdata, setFormData] = useState<formData>({
     name: "",
+    user_type: "",
     email: "",
-    password: "",
-    password_confirmation: "",
-    usertype: "",
+    phone_number: "",
   });
 
+  const router = useRouter();
+  const [showOtpModal, setShowOtpModal] = useState(false);
+  const [otp, setOtp] = useState(["", "", "", ""]);
+
   const { login, register } = myAppHook();
+
+  // ✅ Handle OTP input boxes
+  const handleOtpChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    idx: number
+  ) => {
+    const { value } = e.target;
+    if (!/^[0-9]?$/.test(value)) return; // only digits 0-9
+
+    const newOtp = [...otp];
+    newOtp[idx] = value;
+    setOtp(newOtp);
+
+    // Auto-focus next input
+    if (value && idx < otp.length - 1) {
+      const nextInput = document.querySelector(
+        `input[name=otp-${idx + 1}]`
+      ) as HTMLInputElement;
+      if (nextInput) nextInput.focus();
+    }
+  };
+
+  const handleOtpSubmit = () => {
+    const fullOtp = otp.join("");
+    if (fullOtp.length !== 4) {
+      toast.error("Please enter all 4 digits");
+      return;
+    }
+    // TODO: validate OTP with backend
+    toast.success("OTP submitted successfully!");
+    setShowOtpModal(false);
+    router.push("/PropertyPost");
+  };
 
   const handleOnChangeInput = (
     event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -42,13 +79,14 @@ const AuthCard = ({
     event.preventDefault();
     try {
       if (isLogin) {
-        await login(formdata.email, formdata.password);
+        setShowOtpModal(true);
+        // await login(formdata.email, formdata.phone_number);
       } else {
         await register(
           formdata.name!,
+          formdata.user_type!,
           formdata.email,
-          formdata.password,
-          formdata.password_confirmation!
+          formdata.phone_number
         );
       }
     } catch (error) {
@@ -99,24 +137,40 @@ const AuthCard = ({
               <div>
                 <label
                   className="block text-gray-700 mb-1 font-semibold text-sm sm:text-base"
-                  htmlFor="usertype"
+                  htmlFor="user_type"
                 >
-                  User Type
+                  User
                 </label>
                 <select
-                  name="usertype"
-                  id="usertype"
+                  name="user_type"
+                  id="user_type"
                   onChange={handleOnChangeInput}
-                  value={formdata.usertype}
+                  value={formdata.user_type}
                   className="w-full border border-gray-300 rounded-xl px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-gray-50 shadow-sm transition-all text-sm sm:text-base"
                   required
                 >
-                  <option value="">Select user type</option>
-                  <option value="Owner">Owner</option>
-                  <option value="Agent">Agent</option>
-                  <option value="Promoter">Promoter</option>
-                  <option value="Agency">Builder</option>
+                  <option value="">--Select type--</option>
+                  <option value="user">User</option>
+                  <option value="dealer">Dealer</option>
                 </select>
+              </div>
+              <div>
+                <label
+                  className="block text-gray-700 mb-1 font-semibold text-sm sm:text-base"
+                  htmlFor="email"
+                >
+                  Email
+                </label>
+                <input
+                  name="email"
+                  id="email"
+                  type="email"
+                  value={formdata.email}
+                  onChange={handleOnChangeInput}
+                  placeholder="Enter your email id"
+                  className="w-full border border-gray-300 rounded-xl px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-gray-50 shadow-sm transition-all text-sm sm:text-base"
+                  required
+                />
               </div>
             </>
           )}
@@ -124,61 +178,21 @@ const AuthCard = ({
           <div>
             <label
               className="block text-gray-700 mb-1 font-semibold text-sm sm:text-base"
-              htmlFor="email"
+              htmlFor="phone_number"
             >
-              Email
+              Phone number
             </label>
             <input
-              name="email"
-              id="email"
-              type="email"
-              value={formdata.email}
+              name="phone_number"
+              id="phone_number"
+              type="number"
+              value={formdata.phone_number}
               onChange={handleOnChangeInput}
-              placeholder="Enter your email id"
+              placeholder="Enter your phone number"
               className="w-full border border-gray-300 rounded-xl px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-gray-50 shadow-sm transition-all text-sm sm:text-base"
               required
             />
           </div>
-
-          <div>
-            <label
-              className="block text-gray-700 mb-1 font-semibold text-sm sm:text-base"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              name="password"
-              id="password"
-              type="password"
-              value={formdata.password}
-              onChange={handleOnChangeInput}
-              placeholder="Enter your password"
-              className="w-full border border-gray-300 rounded-xl px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-gray-50 shadow-sm transition-all text-sm sm:text-base"
-              required
-            />
-          </div>
-
-          {!isLogin && (
-            <div>
-              <label
-                className="block text-gray-700 mb-1 font-semibold text-sm sm:text-base"
-                htmlFor="password_confirmation"
-              >
-                Confirm Password
-              </label>
-              <input
-                name="password_confirmation"
-                id="password_confirmation"
-                type="password"
-                value={formdata.password_confirmation}
-                onChange={handleOnChangeInput}
-                placeholder="Confirm your password"
-                className="w-full border border-gray-300 rounded-xl px-3 py-2 sm:px-4 sm:py-3 md:px-5 md:py-4 focus:outline-none focus:ring-2 focus:ring-cyan-400 bg-gray-50 shadow-sm transition-all text-sm sm:text-base"
-                required
-              />
-            </div>
-          )}
         </div>
         <button
           type="submit"
@@ -187,6 +201,34 @@ const AuthCard = ({
           {isLogin ? "Login Now" : "Register Now"}
         </button>
       </form>
+
+    {showOtpModal && (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-opacity-30 backdrop-blur-sm">
+        <div className="bg-white rounded-xl p-8 w-full max-w-md shadow-xl">
+          <h2 className="text-xl font-bold mb-6 text-center">Enter OTP</h2>
+          <div className="flex justify-evenly space-x-1 mb-6">
+            {otp.map((digit, idx) => (
+              <input
+                key={idx}
+                name={`otp-${idx}`}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                value={digit}
+                onChange={(e) => handleOtpChange(e, idx)}
+                className="w-12 h-12 border border-gray-300 text-center rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              />
+            ))}
+          </div>
+          <button
+            onClick={handleOtpSubmit}
+            className="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 rounded-xl"
+          >
+            Submit OTP
+          </button>
+        </div>
+      </div>
+    )}
     </div>
   );
 };

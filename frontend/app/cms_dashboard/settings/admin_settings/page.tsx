@@ -37,14 +37,14 @@ export default function PropertiesPage() {
         <main className="flex-1 p-2 sm:p-6 overflow-x-auto">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
             <h5 className="text-2xl sm:text-3xl font-bold text-gray-800">
-            Properties
+            Admin Set Up
             </h5>
-            <Link href="/cms_dashboard/properties/new" className="w-full sm:w-auto">
+            <Link href="/cms_dashboard/societies/new" className="w-full sm:w-auto">
               <button
                 type="button"
                 className="w-full sm:w-auto text-white bg-gradient-to-r from-cyan-500 to-blue-500 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-cyan-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center cursor-pointer"
               >
-                + Add Property
+                + New Society
               </button>
             </Link>
           </div>

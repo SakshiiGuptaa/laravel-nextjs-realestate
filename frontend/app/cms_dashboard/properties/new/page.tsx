@@ -1,14 +1,15 @@
+"use client"
 import CmsNav from "@/cms_components/dashboard/cms_nav";
 import CmsSidenav from "@/cms_components/dashboard/cms_sidenav";
+import { useState } from "react";
 
 export default function NewPropertyForm() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
-    <div className="flex h-screen bg-gray-100">
-      <div className="hidden md:block">
-        <CmsSidenav />
-      </div>
-      <div className="flex flex-col flex-grow">
-        <CmsNav />
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <CmsNav onMenuClick={() => setSidebarOpen(true)} />
+      <div className="flex flex-1">
+        <CmsSidenav open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
         <main className="p-6 flex-1 overflow-auto">
           <h2 className="text-2xl font-bold text-gray-800 mb-6">New Property Setup</h2>
 

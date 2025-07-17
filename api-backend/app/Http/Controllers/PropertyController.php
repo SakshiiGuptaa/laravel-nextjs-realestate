@@ -354,4 +354,210 @@ class PropertyController extends Controller
             "message" => "Property deleted successfully"
         ]);
     }
+   /**
+     * Get properties for the authenticated dealer
+     */
+    public function dealerIndex(Request $request)
+    {
+        $user = $request->user();
+        
+        if (!$user) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ], 401);
+        }
+
+        $properties = Property::where('user_id', $user->id)->get();
+
+        // Transform the data to match the expected format
+        $transformedProperties = $properties->map(function ($property) {
+            return [
+                'id' => $property->id,
+                'title' => $this->generateTitle($property),
+                'description' => $this->generateDescription($property),
+                'type' => $property->property_type ?? 'Residential',
+                'price' => $this->generatePrice($property),
+                'bedrooms' => $property->bedrooms ?? 'N/A',
+                'bathrooms' => $property->bathrooms ?? 'N/A',
+                'area' => $property->area_value ?? 'N/A',
+                'location' => $property->city ?? 'Location not specified',
+                'images' => [], // Will be empty for now
+                'status' => 'active',
+                'created_at' => $property->created_at,
+                'updated_at' => $property->updated_at
+            ];
+        });
+
+        return response()->json([
+            'status' => true,
+            'properties' => $transformedProperties
+        ]);
+    }
+
+    /**
+     * Generate a title for the property
+     */
+    private function generateTitle($property)
+    {
+        $title = '';
+        
+        if ($property->sub_type) {
+            $title = $property->sub_type;
+        } elseif ($property->property_type) {
+            $title = $property->property_type;
+        } else {
+            $title = 'Property';
+        }
+        
+        if ($property->city) {
+            $title .= ' in ' . $property->city;
+        }
+        
+        return $title;
+    }
+
+    /**
+     * Generate a description for the property
+     */
+    private function generateDescription($property)
+    {
+        $description = '';
+        
+        if ($property->listing_type) {
+            $description = 'Available for ' . $property->listing_type . '. ';
+        }
+        
+        if ($property->bedrooms && $property->bathrooms) {
+            $description .= $property->bedrooms . ' bedrooms, ' . $property->bathrooms . ' bathrooms. ';
+        }
+        
+        if ($property->area_value && $property->area_unit) {
+            $description .= $property->area_value . ' ' . $property->area_unit . ' ' . ($property->area_type ?? 'area') . '.';
+        }
+        
+        return $description ?: 'Property details available on request.';
+    }
+
+    /**
+     * Generate a price for the property (placeholder)
+     */
+    private function generatePrice($property)
+    {
+        // Since there's no price field in your table, we'll generate a placeholder
+        // You might want to add a price field to your properties table
+        
+        if ($property->listing_type === 'Rent') {
+            // Generate rent based on area (rough estimate)
+            $baseRent = ($property->area_value ?? 1000) * 0.5;
+            return (int)$baseRent;
+        } else {
+            // Generate sale price based on area (rough estimate)
+            $basePrice = ($property->area_value ?? 1000) * 50;
+            return (int)$basePrice;
+        }
+    }
+
+    /**
+     * Store a new property for the authenticated dealer
+     */
+    public function dealerStore(Request $request)
+    {
+        $validated = $request->validate([
+            'listing_type' => 'required|string',
+            'property_type' => 'required|string',
+            'sub_type' => 'nullable|string',
+            'city' => 'required|string',
+            'bedrooms' => 'nullable|string',
+            'bathrooms' => 'nullable|string',
+            'balconies' => 'nullable|string',
+            'area_type' => 'nullable|string',
+            'area_value' => 'nullable|string',
+            'area_unit' => 'nullable|string',
+        ]);
+
+        $property = Property::create([
+            'user_id' => $request->user()->id,
+            ...$validated,
+        ]);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Property created successfully',
+            'property' => $property,
+        ], 201);
+    }
+
+    /**
+     * Delete a property for the authenticated dealer
+     */
+    public function dealerDestroy(Request $request, Property $property)
+    {
+        if ($property->user_id !== $request->user()->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $property->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Property deleted successfully'
+        ]);
+    }
+
+    /**
+     * Show a specific property for the authenticated dealer
+     */
+    public function dealerShow(Request $request, Property $property)
+    {
+        if ($property->user_id !== $request->user()->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        return response()->json([
+            'status' => true,
+            'property' => $property
+        ]);
+    }
+
+    /**
+     * Update a property for the authenticated dealer
+     */
+    public function dealerUpdate(Request $request, Property $property)
+    {
+        if ($property->user_id !== $request->user()->id) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Unauthorized'
+            ], 403);
+        }
+
+        $validated = $request->validate([
+            'listing_type' => 'required|string',
+            'property_type' => 'required|string',
+            'sub_type' => 'required|string',
+            'city' => 'required|string',
+            'bedrooms' => 'required|string',
+            'bathrooms' => 'required|string',
+            'balconies' => 'required|string',
+            'area_type' => 'required|string',
+            'area_value' => 'required|string',
+            'area_unit' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+
+        $property->update($validated);
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Property updated successfully',
+            'property' => $property
+        ]);
+    }
 }

@@ -16,14 +16,12 @@ export default function CmsNav({ onMenuClick }: { onMenuClick?: () => void }) {
             <HiMenu className="text-2xl text-gray-700" />
           </button>
         )}
-        <Link href="/" className="flex items-center space-x-3 rtl:space-x-reverse">
+        <Link href="/" className="flex items-center justify-center space-x-3 rtl:space-x-reverse">
           <Image src="/logo/logo_crossingrepublic.png" width={240} height={240} alt="Logo" />
-          <span className="text-lg font-bold font-serif mt-4 text-gray-800">ADMIN PANEL</span>
-       
         </Link>
       </div>
       <div className="flex items-center space-x-4">
-        <button className="text-xl text-gray-600 font-serif hover:text-blue-600">
+        <button className="text-xl text-gray-600 font-medium hover:text-blue-600">
           Logout
         </button>
       </div>

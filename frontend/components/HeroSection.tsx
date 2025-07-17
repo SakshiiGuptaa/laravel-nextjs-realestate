@@ -15,9 +15,23 @@ export default function HeroSection() {
   const { properties, loading } = useProperties();
 
   // console.log(properties.map(p => p.listing_type));
+  const getListingType = (tab: string) => {
+    switch (tab) {
+      case "Buy":
+        return "sell"; // map "Buy" tab to "sell" in DB
+      case "Rent":
+        return "rent";
+      case "Projects":
+        return "projects";
+      default:
+        return tab.toLowerCase();
+    }
+  };
 
   const filteredProperties = properties.filter(
-    (property) => property.listing_type?.toLowerCase() === selectedTab.toLowerCase()
+    (property) =>
+      property.listing_type?.toLowerCase() ===
+      getListingType(selectedTab)
   );
 
   const router = useRouter();
@@ -68,7 +82,7 @@ export default function HeroSection() {
 
         {/* Tabs */}
       <div className="z-30 flex items-center justify-center space-x-2 bg-transparent rounded overflow-hidden mb-4">
-        {["Buy", "Sell", "Rent", "Projects"].map((tab) => (
+        {["Buy", "Rent", "Projects"].map((tab) => (
           <button
             key={tab}
             type="button"
@@ -107,11 +121,11 @@ export default function HeroSection() {
               <option key={type} className="text-cyan-800">{type}</option>
               ))}
             </select>
-            <input
+            {/* <input
               type="text"
               placeholder="Search by locality"
               className="flex-1 min-w-0 border-none bg-transparent px-4 py-3 text-base rounded-xl md:rounded-full focus:ring-0 focus:outline-none text-cyan-800 placeholder-cyan-600 font-semibold"
-            />
+            /> */}
             <select
               value={selectedBHK}
               onChange={(e) => setSelectedBHK(e.target.value)}
@@ -134,7 +148,7 @@ export default function HeroSection() {
 
 
       <div className="flex space-x-2 bg-transparent rounded overflow-hidden mb-10">
-        <button className="bg-blue-900 rounded-3xl text-white px-6 py-2 font-medium">Verified Listings</button>
+        <button className="bg-blue-400 rounded-3xl text-white px-6 py-2 font-medium">Verified Listings</button>
         <button className="bg-blue-400 rounded-3xl text-white px-6 py-2 font-medium">Gated Communities</button>
         <button className="bg-blue-400 rounded-3xl text-white px-6 py-2 font-medium">Trusted by Locals</button>
       </div>

@@ -11,8 +11,10 @@ class AuthController extends Controller
     public function register(Request $request){
         $data = $request->validate([
             "name" => "required|string",
+            "user_type" => "required|in:user,dealer", // ✅ Add this
             "email" => "required|email|unique:users,email",
-            "password" => "required|confirmed",
+            "phone_number" => "required|string|unique:users,phone_number",
+            // "password" => "required|confirmed",
         ]);
 
         //password confirmation
@@ -30,10 +32,10 @@ class AuthController extends Controller
 
         $request->validate([
             "email" => "required|email",
-            "password" => "required"
+            "phone_number" => "required"
         ]);
 
-        if(!Auth::attempt($request->only("email","password"))){
+        if(!Auth::attempt($request->only("email","phone_number"))){
 
             return response()->json([
                 "status" => false,

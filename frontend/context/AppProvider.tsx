@@ -9,8 +9,8 @@ import { useRouter } from "next/navigation";
 interface AppProviderType{
     isLoading:boolean,
     authToken:string|null,
-    login: (email: string, password: string) => Promise<void>,
-    register: (name:string, email: string, password: string, password_confirmation: string) => Promise<void>,
+    login: (email: string, phone_number: string) => Promise<void>,
+    register: (name:string, user_type:string, email: string, phone_number:string) => Promise<void>,
     logout: ()=> void
 } 
 
@@ -41,19 +41,19 @@ export const AppProvider = ({
     setIsLoading(false);
     }, []); // <--- Add this empty array
 
-    const login = async (email: string, password:string) =>{
+    const login = async (email: string, phone_number:string) =>{
         setIsLoading(true);
         try{
             const response = await axios.post(`${API_URL}/login`, {
                 email,
-                password
+                phone_number
             });
 
             if(response.data.status){
                 Cookies.set("authToken", response.data.token, { expires: 7 });
                 toast.success("Login successful");
                 setAuthToken(response.data.token)
-                router.push("/dashboard")
+                router.push("/PropertyPost")
             }else{
                 toast.error("Invalid login details")
             }
@@ -68,16 +68,22 @@ export const AppProvider = ({
         }
     }
 
-    const register = async (name:string, email: string, password: string, password_confirmation: string) =>{
+    const register = async (name:string, user_type:string, email: string, phone_number:string) =>{
         setIsLoading(true);
         try{
             const response = await axios.post(`${API_URL}/register`, {
                 name,
+                user_type,
                 email,
-                password,
-                password_confirmation
+                phone_number,
+                // password,
+                // password_confirmation
             });
-
+            if(response.data.status){
+                toast.success("Registration done successfully, Login to continue!");
+            }else{
+                toast.error("Invalid Registration details")
+            }
             console.log(response);
             
         }catch(error){
